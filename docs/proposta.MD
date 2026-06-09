@@ -6,128 +6,59 @@ A proposta deve apresentar uma ideia simples, clara e viável para ser desenvolv
 
 ## 1. Nome provisório do jogo
 
-Escreva aqui o nome provisório do jogo.
-
-Exemplo:
-
-> Corrida dos Obstáculos
+Collector
 
 ## 2. Integrantes do grupo
 
-Liste os integrantes do grupo.
-
-- Nome 1:
-- Nome 2:
-- Nome 3:
-- Nome 4:
+- Frederico Marcos de Paula Marques
+- Lucas Dutra Figueredo
 
 ## 3. Tipo de jogo
 
-Indique o tipo de jogo que será desenvolvido.
-
-Exemplos:
-
-- jogo de desviar de obstáculos;
-- jogo de coleta de itens;
-- labirinto simples;
-- jogo de perguntas e respostas;
-- jogo de memória;
-- Pong;
-- Snake;
-- Breakout;
-- nave desviando de meteoros;
-- corrida simples com obstáculos;
-- jogo de clique rápido;
-- jogo de sobrevivência simples.
-
 Tipo escolhido pelo grupo:
 
-> Escreva aqui.
+> Jogo de coleta de itens com obstáculos
 
 ## 4. Descrição geral do jogo
 
-Explique, em poucas linhas, como o jogo funcionará.
-
-Procure responder:
-
-- O que aparece na tela?
-- O que o jogador controla?
-- O que o jogador precisa fazer?
-- Quais desafios aparecem durante a partida?
-
 Descrição:
 
-> Escreva aqui.
+> O jogo é uma experiência arcade simples onde:
+> 
+> - Na tela: Um personagem controlável, moedas espalhadas, obstáculos/inimigos em movimento, placar de pontos, contador de vidas e tempo decorrido.
+> - O jogador controla: Um personagem (quadrado ou círculo colorido) que se move em 4 direções.
+> - O que precisa fazer: Coletar o máximo possível de moedas enquanto evita colidir com obstáculos que se movem pela tela.
+> - Desafios: Obstáculos aparecem aleatoriamente e aumentam em velocidade conforme o tempo passa; moedas surgem em posições aleatórias com tempo limitado de permanência.
 
 ## 5. Objetivo do jogador
 
-Explique qual é o objetivo principal do jogador.
-
-Exemplos:
-
-- coletar o maior número possível de itens;
-- sobreviver pelo maior tempo possível;
-- chegar até o final do labirinto;
-- acertar alvos;
-- responder perguntas corretamente;
-- evitar obstáculos;
-- quebrar todos os blocos.
-
 Objetivo:
 
-> Escreva aqui.
+> O objetivo principal é coletar a maior quantidade possível de moedas antes de perder todas as vidas, acumulando pontos e estabelecendo um recorde pessoal. O jogo premia tanto a eficiência na coleta quanto a habilidade em evitar obstáculos.
 
 ## 6. Regras principais
 
-Liste as principais regras do jogo.
-
-Exemplo:
-
-- O jogador começa com 3 vidas.
-- Cada moeda coletada vale 10 pontos.
-- Cada colisão com obstáculo remove 1 vida.
-- A partida termina quando as vidas chegam a zero.
-- O jogador vence se alcançar 100 pontos.
-
 Regras do grupo:
 
-- Regra 1:
-- Regra 2:
-- Regra 3:
-- Regra 4:
-- Regra 5:
+- O jogador começa com 3 vidas e pode ganhar uma vida adicional a cada 50 moedas coletadas.
+- Cada moeda coletada adiciona 10 pontos ao placar.
+- Cada colisão com um obstáculo remove 1 vida e congela o jogador por 1 segundo (período de invulnerabilidade).
+- As moedas desaparecem automaticamente após 5 segundos se não coletadas.
+- Os obstáculos aumentam sua velocidade a cada 20 segundos de jogo (dificuldade progressiva).
+- A partida termina imediatamente quando as vidas chegam a zero.
+- O recorde máximo é salvo em arquivo para persistência de dados.
 
 ## 7. Condição de vitória
 
-Explique como o jogador vence ou conclui o jogo.
-
-Exemplos:
-
-- atingir determinada pontuação;
-- chegar ao final da fase;
-- sobreviver até o tempo acabar;
-- responder uma quantidade mínima de perguntas;
-- quebrar todos os blocos.
-
 Condição de vitória:
 
-> Escreva aqui.
+> O jogo não possui uma condição de vitória tradicional (final com "você venceu"). O objetivo é sobreviver o máximo possível e acumular a maior pontuação. O jogador "vence" pessoalmente quando supera seu próprio recorde, que é exibido na tela inicial e salvo em arquivo.
 
 ## 8. Condição de derrota ou encerramento
 
-Explique como o jogador perde ou quando a partida termina.
-
-Exemplos:
-
-- perder todas as vidas;
-- acabar o tempo;
-- colidir com determinado obstáculo;
-- errar muitas perguntas;
-- deixar a bola cair, no caso de Breakout ou Pong.
-
 Condição de derrota ou encerramento:
 
-> Escreva aqui.
+> A partida termina quando o jogador perde todas as 3 vidas após colisões com obstáculos. Ao encerrar, o jogo exibe a pontuação final, o tempo de jogo e compara com o recorde anterior. O jogador pode reiniciar uma nova partida ou sair do jogo.
 
 ## 9. Elementos previstos no jogo
 

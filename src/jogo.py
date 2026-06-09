@@ -1,143 +1,256 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+jogo.py - Classe principal que gerencia o loop e a lógica do jogo COLLECTOR
+"""
+
 import pygame
-
-from src.config import (
-    LARGURA_TELA,
-    ALTURA_TELA,
-    FPS,
-    TITULO_JOGO,
-    CINZA,
-    CAMINHO_RECORDE,
-    CAMINHO_SPRITES,
-)
-
-from src.funcoes import (
-    calcular_pontos,
-    jogador_perdeu,
-    limitar_valor,
-    verificar_colisao,
-    tomar_dano,
-)
-from src.sprites import pegar_sprite
-from src.dados import (
-    salvar_recorde,
-    carregar_recorde,
-)
+import random
+import os
+from config import *
+from jogador import Jogador
+from moeda import Moeda
+from obstaculo import Obstaculo
 
 
-def executar_jogo():
-    """Executa o loop principal do jogo e controla estado, colisões e pontuação."""
-    pygame.init()
+class Jogo:
+    """Classe principal do jogo que gerencia todos os componentes."""
     
-
-    tela = pygame.display.set_mode((LARGURA_TELA, ALTURA_TELA))
-    pygame.display.set_caption(TITULO_JOGO)
-
-    relogio = pygame.time.Clock()
-    rodando = True
-
-    # 1. Carregando as imagens recortadas do Spritesheet
-
-
-    # Jogador: usando tamanho 110x110 para capturar o quadrado perfeitamente
-    player_image = pegar_sprite(CAMINHO_SPRITES, x=110, y=120, width=190, height=190, scale=0.5)
-
-    # Gema pequena: usando tamanho 64x64
-    gem_image    = pegar_sprite(CAMINHO_SPRITES, x=900, y=690, width=200, height=200, scale=0.5)
-
-    # Morcego: usando tamanho 180x120 por causa das asas abertas
-    bat_image    = pegar_sprite(CAMINHO_SPRITES, x=905, y=1060, width=200, height=130, scale=0.5)
-    
-    # 2. Criando a estrutura de Sprites usando Dicionários
-    jogador = {
-        "imagem": player_image,
-        "rect": player_image.get_rect(topleft=(100, 100))
-    }
-
-    gema = {
-        "imagem": gem_image,
-        "rect": gem_image.get_rect(topleft=(500, 300))
-    }
-    
-    inimigo = {
-        "imagem": bat_image,
-        "rect": bat_image.get_rect(topleft=(200, 500))
-    }
-
-    velocidade = 5
-    pontos = 0
-    vidas = 3
-    recorde = carregar_recorde(CAMINHO_RECORDE)
-
-    # Loop principal: processa entrada, atualiza estado e renderiza a cena.
-    while rodando:
-        relogio.tick(FPS)
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                rodando = False
-
-        teclas = pygame.key.get_pressed()
-
-        # Movimentação alterando direto os eixos X e Y do retângulo do jogador
-        if teclas[pygame.K_LEFT]:
-            jogador["rect"].x -= velocidade
-        if teclas[pygame.K_RIGHT]:
-            jogador["rect"].x += velocidade
-        if teclas[pygame.K_UP]:
-            jogador["rect"].y -= velocidade
-        if teclas[pygame.K_DOWN]:
-            jogador["rect"].y += velocidade
-
-        # Limitando o jogador dentro das bordas da tela usando as propriedades do Rect
-        jogador["rect"].x = limitar_valor(jogador["rect"].x, 0, LARGURA_TELA - jogador["rect"].width)
-        jogador["rect"].y = limitar_valor(jogador["rect"].y, 0, ALTURA_TELA - jogador["rect"].height)
-
-        # Verificação de colisão com a Gema (antigo 'item')
-        if verificar_colisao(jogador["rect"], gema["rect"]):
-            pontos = calcular_pontos(pontos, 10)
-
-            # Move a gema de lugar ao coletar
-            gema["rect"].x += 80
-            gema["rect"].y += 50
-
-            # Se a gema sair da tela, volta para uma posição segura
-            if gema["rect"].x > LARGURA_TELA - gema["rect"].width:
-                gema["rect"].x = 50
-            if gema["rect"].y > ALTURA_TELA - gema["rect"].height:
-                gema["rect"].y = 50
-
-        # Verificação de colisão com o Inimigo
-        if verificar_colisao(jogador["rect"], inimigo["rect"]):
-            vidas = tomar_dano(vidas, 1)
-
-            # Afasta o inimigo ao colidir
-            inimigo["rect"].x += 80
-            inimigo["rect"].y += 50
-
-            if inimigo["rect"].x > LARGURA_TELA - inimigo["rect"].width:
-                inimigo["rect"].x = 50
-            if inimigo["rect"].y > ALTURA_TELA - inimigo["rect"].height:
-                inimigo["rect"].y = 50
-
-        # Regras de fim de jogo e recorde
-        if jogador_perdeu(vidas):
-            rodando = False
-
-        if pontos > recorde:
-            recorde = pontos
-            salvar_recorde(CAMINHO_RECORDE, recorde)
-
-        pygame.display.set_caption(
-            f"{TITULO_JOGO} | Pontos: {pontos} | Recorde: {recorde} | Vidas: {vidas}"
+    def __init__(self, tela, relogio):
+        """
+        Inicializa o jogo.
+        
+        Args:
+            tela: Superfície Pygame da janela
+            relogio: Objeto Clock do Pygame para controlar FPS
+        """
+        self.tela = tela
+        self.relogio = relogio
+        self.rodando = True
+        
+        # Inicializar fonte
+        self.fonte_grande = pygame.font.Font(None, 48)
+        self.fonte_media = pygame.font.Font(None, 36)
+        self.fonte_pequena = pygame.font.Font(None, 24)
+        
+        # Criar jogador no centro da tela
+        self.jogador = Jogador(
+            LARGURA_TELA // 2 - TAMANHO_JOGADOR // 2,
+            ALTURA_TELA - 100
         )
-
-        tela.fill(CINZA)
-
-        # Desenhando os elementos na tela passando a imagem e o rect de cada dicionário
-        tela.blit(gema["imagem"], gema["rect"])
-        tela.blit(inimigo["imagem"], inimigo["rect"])
-        tela.blit(jogador["imagem"], jogador["rect"])
-
-        pygame.display.flip()
-
-    pygame.quit()
+        
+        # Listas de elementos
+        self.obstaculos = []
+        self.moedas = []
+        
+        # Inicializar obstáculos
+        for _ in range(NUM_OBSTACULOS_INICIAL):
+            self.obstaculos.append(Obstaculo())
+        
+        # Gerar primeira moeda
+        self.moedas.append(Moeda())
+        
+        # Estado do jogo
+        self.pontuacao = 0
+        self.vidas = VIDAS_INICIAIS
+        self.tempo_decorrido = 0  # em ms
+        self.tempo_inicio = pygame.time.get_ticks()
+        self.pausado = False
+        self.game_over = False
+        
+        # Controle de spawn
+        self.ultimo_spawn_moeda = pygame.time.get_ticks()
+        self.ultimo_aumento_dificuldade = pygame.time.get_ticks()
+    
+    def processar_evento(self, evento):
+        """Processa eventos do Pygame."""
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_SPACE:
+                # Pausar/retomar
+                self.pausado = not self.pausado
+            elif evento.key == pygame.K_ESCAPE or evento.key == pygame.K_q:
+                # Sair
+                self.rodando = False
+            elif evento.key == pygame.K_r and self.game_over:
+                # Reiniciar quando game over
+                self.__init__(self.tela, self.relogio)
+    
+    def atualizar(self):
+        """Atualiza a lógica do jogo a cada frame."""
+        if self.pausado or self.game_over:
+            return
+        
+        # Atualizar tempo decorrido
+        tempo_atual = pygame.time.get_ticks()
+        self.tempo_decorrido = tempo_atual - self.tempo_inicio
+        
+        # Processar entrada do jogador
+        self.jogador.processar_entrada()
+        
+        # Atualizar jogador
+        self.jogador.atualizar()
+        
+        # Atualizar obstáculos
+        for obstaculo in self.obstaculos:
+            obstaculo.atualizar()
+        
+        # Atualizar moedas
+        moedas_para_remover = []
+        for moeda in self.moedas:
+            moeda.atualizar()
+            if moeda.esta_expirada():
+                moedas_para_remover.append(moeda)
+        
+        for moeda in moedas_para_remover:
+            self.moedas.remove(moeda)
+        
+        # Detectar colisão: jogador com moedas
+        for moeda in self.moedas[:]:
+            if self.jogador.get_rect().colliderect(moeda.get_rect()):
+                self.pontuacao += moeda.get_pontos()
+                self.moedas.remove(moeda)
+        
+        # Detectar colisão: jogador com obstáculos
+        for obstaculo in self.obstaculos:
+            if self.jogador.get_rect().colliderect(obstaculo.get_rect()):
+                if not self.jogador.invulneravel:
+                    self.vidas -= 1
+                    self.jogador.colidir_com_obstaculo()
+                    
+                    if self.vidas <= 0:
+                        self.game_over = True
+        
+        # Gerar novas moedas periodicamente
+        tempo_atual_ms = pygame.time.get_ticks()
+        if tempo_atual_ms - self.ultimo_spawn_moeda > INTERVALO_SPAWN_MOEDA:
+            if len(self.moedas) < 5:  # Máximo de 5 moedas
+                self.moedas.append(Moeda())
+            self.ultimo_spawn_moeda = tempo_atual_ms
+        
+        # Aumentar dificuldade periodicamente
+        if tempo_atual_ms - self.ultimo_aumento_dificuldade > AUMENTO_DIFICULDADE_INTERVALO:
+            for obstaculo in self.obstaculos:
+                obstaculo.aumentar_dificuldade()
+            
+            # Adicionar novo obstáculo se não temos o máximo
+            if len(self.obstaculos) < NUM_OBSTACULOS_MAX:
+                self.obstaculos.append(Obstaculo(VELOCIDADE_OBSTACULO_INICIAL))
+            
+            self.ultimo_aumento_dificuldade = tempo_atual_ms
+    
+    def desenhar(self, tela):
+        """Desenha todos os elementos do jogo na tela."""
+        # Limpar tela com cor de fundo
+        tela.fill(COR_FUNDO)
+        
+        # Desenhar jogador
+        self.jogador.desenhar(tela)
+        
+        # Desenhar moedas
+        for moeda in self.moedas:
+            moeda.desenhar(tela)
+        
+        # Desenhar obstáculos
+        for obstaculo in self.obstaculos:
+            obstaculo.desenhar(tela)
+        
+        # Desenhar UI (pontuação, vidas, tempo)
+        self._desenhar_ui(tela)
+        
+        # Desenhar game over se necessário
+        if self.game_over:
+            self._desenhar_game_over(tela)
+        
+        # Desenhar pausa se necessário
+        if self.pausado:
+            self._desenhar_pausa(tela)
+    
+    def _desenhar_ui(self, tela):
+        """Desenha a interface do usuário (placar, vidas, tempo)."""
+        # Placar
+        texto_pontos = self.fonte_pequena.render(
+            f"Pontos: {self.pontuacao}", True, COR_TEXTO
+        )
+        tela.blit(texto_pontos, (10, 10))
+        
+        # Vidas
+        texto_vidas = self.fonte_pequena.render(
+            f"Vidas: {self.vidas}", True, COR_TEXTO
+        )
+        tela.blit(texto_vidas, (10, 40))
+        
+        # Tempo
+        segundos = self.tempo_decorrido // 1000
+        minutos = segundos // 60
+        segundos = segundos % 60
+        texto_tempo = self.fonte_pequena.render(
+            f"Tempo: {minutos:02d}:{segundos:02d}", True, COR_TEXTO
+        )
+        tela.blit(texto_tempo, (LARGURA_TELA - 200, 10))
+        
+        # Dificuldade (número de obstáculos)
+        texto_dif = self.fonte_pequena.render(
+            f"Obstáculos: {len(self.obstaculos)}", True, COR_TEXTO
+        )
+        tela.blit(texto_dif, (LARGURA_TELA - 200, 40))
+    
+    def _desenhar_game_over(self, tela):
+        """Desenha a tela de game over."""
+        # Fundo semi-transparente
+        overlay = pygame.Surface((LARGURA_TELA, ALTURA_TELA))
+        overlay.set_alpha(200)
+        overlay.fill((0, 0, 0))
+        tela.blit(overlay, (0, 0))
+        
+        # Texto "GAME OVER"
+        texto_game_over = self.fonte_grande.render(
+            "GAME OVER", True, (255, 0, 0)
+        )
+        rect_game_over = texto_game_over.get_rect(
+            center=(LARGURA_TELA // 2, ALTURA_TELA // 2 - 80)
+        )
+        tela.blit(texto_game_over, rect_game_over)
+        
+        # Pontuação final
+        texto_final = self.fonte_media.render(
+            f"Pontuação Final: {self.pontuacao}", True, COR_TEXTO
+        )
+        rect_final = texto_final.get_rect(
+            center=(LARGURA_TELA // 2, ALTURA_TELA // 2)
+        )
+        tela.blit(texto_final, rect_final)
+        
+        # Instruções
+        texto_restart = self.fonte_pequena.render(
+            "Pressione R para reiniciar ou ESC para sair", True, COR_TEXTO_SECUNDARIO
+        )
+        rect_restart = texto_restart.get_rect(
+            center=(LARGURA_TELA // 2, ALTURA_TELA // 2 + 100)
+        )
+        tela.blit(texto_restart, rect_restart)
+    
+    def _desenhar_pausa(self, tela):
+        """Desenha a tela de pausa."""
+        # Fundo semi-transparente
+        overlay = pygame.Surface((LARGURA_TELA, ALTURA_TELA))
+        overlay.set_alpha(150)
+        overlay.fill((0, 0, 0))
+        tela.blit(overlay, (0, 0))
+        
+        # Texto "PAUSA"
+        texto_pausa = self.fonte_grande.render(
+            "PAUSA", True, COR_TEXTO
+        )
+        rect_pausa = texto_pausa.get_rect(
+            center=(LARGURA_TELA // 2, ALTURA_TELA // 2 - 50)
+        )
+        tela.blit(texto_pausa, rect_pausa)
+        
+        # Instruções
+        texto_continuar = self.fonte_pequena.render(
+            "Pressione ESPAÇO para continuar", True, COR_TEXTO_SECUNDARIO
+        )
+        rect_continuar = texto_continuar.get_rect(
+            center=(LARGURA_TELA // 2, ALTURA_TELA // 2 + 50)
+        )
+        tela.blit(texto_continuar, rect_continuar)
