@@ -62,66 +62,44 @@ Condição de derrota ou encerramento:
 
 ## 9. Elementos previstos no jogo
 
-Descreva os principais elementos que farão parte do jogo.
-
 ## Jogador ou elemento principal
-
-Exemplo:
-
-> Um personagem controlado pelas setas do teclado.
 
 Descrição:
 
-> Escreva aqui.
+> Um quadrado verde de 30x30 pixels, controlado pelas setas do teclado ou WASD. O personagem pisca (fica invisível brevemente) após colidir com obstáculos para indicar invulnerabilidade temporária.
 
 ## Obstáculos, inimigos ou desafios
 
-Exemplo:
-
-> Obstáculos aparecem em posições aleatórias e devem ser evitados.
-
 Descrição:
 
-> Escreva aqui.
+> Obstáculos vermelhos (30x30 pixels) que se movem em padrões aleatórios (horizontal, vertical ou diagonal) pela tela. Iniciam com velocidade moderada e aumentam de velocidade gradualmente. Cerca de 3-5 obstáculos ativos simultaneamente, com novos aparecendo conforme o tempo passa.
 
 ## Itens, alvos ou objetos de interação
 
-Exemplo:
-
-> Moedas aparecem na tela e aumentam a pontuação quando coletadas.
-
 Descrição:
 
-> Escreva aqui.
+> Moedas amarelas (15x15 pixels) que aparecem em posições aleatórias. Cada moeda fica visível por 5 segundos e desaparece se não coletada. O jogador ganha 10 pontos por moeda coletada. Novas moedas aparecem a cada 2 segundos.
 
 ## Pontuação, vidas, tempo ou progresso
 
-Exemplo:
-
-> O jogador começa com 3 vidas e ganha 10 pontos por item coletado.
-
 Descrição:
 
-> Escreva aqui.
+> - Vidas: Começam em 3, exibidas como corações na parte superior esquerda.
+> - Pontuação: Atual e recorde, exibidos no topo da tela.
+> - Tempo: Tempo decorrido da partida atual, atualizado a cada segundo.
+> - Nível de dificuldade: Indicado indiretamente pela velocidade dos obstáculos (aumenta a cada 20 segundos).
 
 ## 10. Controles previstos
 
-Informe os comandos que serão utilizados pelo jogador.
-
-Exemplo:
-
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
-
 Controles do grupo:
 
-- Tecla/comando:
-- Tecla/comando:
-- Tecla/comando:
+- Seta para cima ou W: mover o personagem para cima
+- Seta para baixo ou S: mover o personagem para baixo
+- Seta para esquerda ou A: mover o personagem para esquerda
+- Seta para direita ou D: mover o personagem para direita
+- Espaço: pausar/retomar o jogo
+- P: voltar ao menu principal (durante a pausa)
+- ESC ou Q: sair do jogo
 
 ## 11. Organização inicial do código
 
@@ -137,81 +115,61 @@ Exemplo:
 
 Organização planejada:
 
-> Escreva aqui.
-
+- `main.py`: inicia o jogo;
+- `src/jogo.py`: Classe principal do jogo (Game)
+- `src/config.py`: Configurações (tamanho da tela, cores,constantes)
+- `src/jogador.py`: Classe do personagem jogador
+- `src/obstaculo.py`: Classe dos obstáculos/inimigos
+- `src/moeda.py`: Classe das moedas
+- `src/gerenciador.py`: Gerenciador de colisões, spawning e eventos
+- `src/dados.py`: Funções de leitura/escrita de arquivo
 
 ## 12. Recursos externos previstos
 
-Informe se o grupo pretende utilizar imagens, sons, fontes, tutoriais ou códigos externos.
-
-Exemplo:
-
-- imagens obtidas de banco gratuito;
-- sons gratuitos;
-- tutorial usado apenas como referência;
-- fonte personalizada.
-
-Recursos previstos:
-
-> Escreva aqui.
-
-Caso não pretenda utilizar recursos externos, escreva:
-
-> Não pretendemos utilizar recursos externos.
+> Não pretendemos utilizar recursos externos. O jogo será desenvolvido apenas com formas geométricas básicas (quadrados e círculos) usando a biblioteca Pygame, sem imagens, sons ou fontes personalizadas. Textos serão exibidos com a fonte padrão do Pygame.
 
 ## 13. Principais dificuldades esperadas
 
-Liste as dificuldades que o grupo acredita que poderá enfrentar.
-
-Exemplos:
-
-- movimentação do jogador;
-- colisão entre objetos;
-- controle de tempo;
-- criação do ranking;
-- organização do código;
-- uso do GitHub;
-- testes;
-- exibição de textos na tela.
-
 Dificuldades previstas:
 
-- Dificuldade 1:
-- Dificuldade 2:
-- Dificuldade 3:
+- Detecção de colisões: Implementar corretamente a detecção de colisão entre o jogador e os obstáculos/moedas.
+- Sincronização de tempo: Controlar corretamente o timer de desaparecimento das moedas e o aumento progressivo de dificuldade.
+- Movimento dos obstáculos: Programar movimentos variados (diagonal, padrão aleatório) sem que saiam da tela.
+- Gerenciamento de estado: Manter controle dos estados de pausa, game over, menu principal e jogo ativo.
+- Persistência de dados: Implementar corretamente a leitura e escrita do recorde em arquivo de forma segura.
+- Organização modular: Dividir o código em classes e funções bem definidas, mantendo responsabilidades claras.
 
 ## 14. Escopo mínimo para a entrega final
 
-Descreva qual será a versão mínima aceitável do jogo.
-
-Esta seção é importante para evitar que o grupo escolha uma ideia grande demais.
-
-Exemplo:
-
-> A versão mínima do jogo terá um personagem controlado pelo teclado, obstáculos aparecendo na tela, sistema de vidas, sistema de pontuação e tela de fim de jogo.
-
 Escopo mínimo:
 
-> Escreva aqui.
+> A versão mínima aceitável do jogo COLLECTOR conterá:
+> 
+> - Uma janela Pygame funcional (800x600 pixels)
+> - Um personagem controlável pelas setas do teclado ou WASD
+> - 3-5 obstáculos em movimento aleatório
+> - Sistema de coleta de moedas (aparecimento aleatório e coleta detectada)
+> - Sistema de vidas (começa com 3, diminui com colisões)
+> - Sistema de pontuação (incrementa com coleta de moedas)
+> - Detecção de colisão entre jogador e obstáculos
+> - Tela de game over com exibição da pontuação final
+> - Capacidade de reiniciar o jogo após game over
+> - Leitura e escrita do recorde em arquivo
+> - Código organizado em pelo menos 4-5 funções ou classes principais
+> - Documentação básica no README.md
+> - Testes unitários simples para funções críticas (colisão, pontuação)
 
 ## 15. Possíveis melhorias, caso haja tempo
 
-Liste funcionalidades extras que o grupo poderá implementar se conseguir concluir o escopo mínimo.
-
-Exemplos:
-
-- tela inicial;
-- sons;
-- fases;
-- aumento de dificuldade;
-- ranking;
-- animações;
-- novos tipos de obstáculos;
-- diferentes personagens;
-- menu de pausa.
-
 Melhorias possíveis:
 
-- Melhoria 1:
-- Melhoria 2:
-- Melhoria 3:
+- Menu principal: Tela inicial com opções de jogar, ver recorde e sair.
+- Pausa: Implementar sistema de pausa (tecla Espaço) com menu de pausa.
+- Efeitos visuais: Animação de explosão quando o jogador colide, efeito de piscar durante invulnerabilidade.
+- Sons: Adicionar sons para coleta de moedas, colisão e game over (usando arquivos WAV simples).
+- Níveis/Fases: Diferentes níveis com padrões de obstáculos mais complexos.
+- Ranking: Manter histórico dos 5 maiores recordes com nomes.
+- Power-ups: Items especiais que concedem invulnerabilidade temporária ou dobram pontos.
+- Temas visuais: Diferentes temas de cores ou modos claros/escuro.
+- Controles gamepad: Suporte para joystick/controle Xbox.
+- Leaderboard visual: Tabela de recordes exibida na tela inicial.
