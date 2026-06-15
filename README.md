@@ -1,91 +1,172 @@
-# Nome do Jogo
+# Collector
 
-Projeto final da disciplina de Introdução a Algoritmos/Programação, desenvolvido com Python e Pygame.
+## Integrantes
 
-Este repositório é um template para os grupos da disciplina. A proposta é começar com uma base funcional e evoluir o jogo ao longo do semestre.
+* Lucas Dutra
+* Fred Marques
 
-## Integrantes do grupo
 
-- Nome do integrante 1
-- Nome do integrante 2
-- Nome do integrante 3
-- Nome do integrante 4
+---
 
-## Estrutura do projeto
+## Sobre o jogo
 
-- `main.py`: ponto de entrada da aplicação.
-- `src/`: código-fonte principal do jogo (loop, regras, sprites e dados).
-- `assets/`: imagens, fontes e sons.
-- `data/`: arquivos persistentes (recorde/ranking).
-- `tests/`: testes unitários com `pytest`.
-- `docs/`: documentação do projeto, incluindo proposta inicial.
+**Collector** é um jogo desenvolvido em Python utilizando a biblioteca Pygame.
 
-## Descrição do jogo
+O objetivo do jogador é coletar o maior número possível de moedas enquanto evita obstáculos que aparecem na tela. Conforme a partida avança, a dificuldade aumenta, exigindo maior atenção e reflexos do jogador.
 
-Descreva brevemente a ideia principal do jogo.
+O jogo possui sistema de pontuação, vidas, obstáculos dinâmicos e registro de recordes.
 
-Exemplo:
+---
 
-> O jogo consiste em controlar um personagem que deve coletar moedas e evitar obstáculos. O jogador ganha pontos ao coletar itens e perde vidas ao colidir com obstáculos. A partida termina quando o tempo acaba ou quando o jogador perde todas as vidas.
+## Objetivo
 
-## Objetivo do jogador
+Coletar moedas para aumentar a pontuação e sobreviver o máximo de tempo possível, evitando colisões com obstáculos.
 
-Explique o que o jogador precisa fazer para vencer ou avançar no jogo.
+---
 
-Exemplo:
+## Regras
 
-> O objetivo é coletar a maior quantidade possível de itens antes que o tempo acabe, evitando colisões com os obstáculos.
+* O jogador controla um personagem na tela.
+* Moedas aparecem aleatoriamente e podem ser coletadas.
+* Cada moeda coletada aumenta a pontuação.
+* Obstáculos aparecem durante a partida.
+* Colidir com um obstáculo reduz uma vida.
+* Quando todas as vidas acabam, a partida termina.
+* O jogo registra o melhor desempenho obtido.
 
-## Regras do jogo
-
-Liste as principais regras do jogo.
-
-Exemplo:
-
-- O jogador se movimenta usando as setas do teclado.
-- Cada item coletado aumenta a pontuação.
-- Colidir com um obstáculo reduz a quantidade de vidas.
-- A partida termina quando o jogador perde todas as vidas ou quando o tempo acaba.
+---
 
 ## Controles
 
-Informe as teclas ou comandos utilizados no jogo.
+| Tecla | Ação                  |
+| ----- | --------------------- |
+| ←     | Mover para a esquerda |
+| →     | Mover para a direita  |
+| ↑     | Mover para cima       |
+| ↓     | Mover para baixo      |
+| ESC   | Sair do jogo          |
 
-Exemplo:
+---
 
-- Seta para cima: mover para cima
-- Seta para baixo: mover para baixo
-- Seta para esquerda: mover para esquerda
-- Seta para direita: mover para direita
-- Espaço: realizar ação
-- ESC: sair do jogo
+## Estrutura do Projeto
 
-## Como executar o projeto
+```text
+Collector/
+│
+├── assets/
+│   ├── images/
+│   └── sounds/
+│
+├── data/
+│   ├── ranking.txt
+│   └── recorde.txt
+│
+├── docs/
+│   └── proposta.md
+│
+├── src/
+│   ├── config.py
+│   ├── jogador.py
+│   ├── jogo.py
+│   ├── moeda.py
+│   └── obstaculo.py
+│
+├── tests/
+│   └── test_logica.py
+│
+├── main.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Tecnologias Utilizadas
+
+* Python
+* Pygame
+* Pytest
+
+---
+
+## Como Executar
 
 ### 1. Clonar o repositório
 
 ```bash
-git clone LINK_DO_REPOSITORIO
-cd NOME_DA_PASTA
+git clone <link-do-repositorio>
+```
+
+### 2. Criar ambiente virtual
+
+```bash
+python -m venv venv
+```
+
+### 3. Ativar ambiente virtual
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. Instalar dependências
+
+```bash
 pip install -r requirements.txt
+```
+
+### 5. Executar o jogo
+
+```bash
 python main.py
 ```
 
-## Como executar os testes
+---
+
+## Testes
+
+Para executar os testes automatizados:
+
+```bash
+pytest
+```
+
+ou
 
 ```bash
 python -m pytest
 ```
 
-## Checklist mínimo para entrega
+---
 
-- Preencher este README com nome final, descrição real, regras e controles do jogo.
-- Atualizar `docs/proposta.MD` com a proposta do grupo.
-- Garantir que o jogo executa com `python main.py`.
-- Garantir que os testes passam com `pytest`.
+## Conceitos da Disciplina Utilizados
 
-## Observações para os alunos
+* Variáveis
+* Estruturas condicionais
+* Laços de repetição
+* Funções
+* Modularização
+* Listas
+* Manipulação de arquivos
+* Programação orientada a objetos
+* Testes automatizados
+* Biblioteca Pygame
 
-- Mantenham o código organizado em módulos pequenos e com responsabilidade clara.
-- Comentem partes importantes da lógica, principalmente regras do jogo.
-- Registrem decisões técnicas no README do grupo ao longo do desenvolvimento.
+---
+
+## Melhorias Futuras
+
+* Sistema de ranking completo
+* Novos tipos de obstáculos
+* Diferentes níveis de dificuldade
+* Efeitos sonoros
+* Tela inicial e tela de vitória
+* Sistema de fases
+
+---
+
+## Licença
+
+Projeto desenvolvido exclusivamente para fins acadêmicos na disciplina de Introdução a Algoritmos e Programação.
