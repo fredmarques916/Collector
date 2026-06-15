@@ -9,6 +9,7 @@ import random
 import os
 from config import *
 from jogador import Jogador
+from recorde import carregar_recorde, salvar_recorde
 from moeda import Moeda
 from obstaculo import Obstaculo
 
@@ -53,6 +54,8 @@ class Jogo:
         # Estado do jogo
         self.pontuacao = 0
         self.vidas = VIDAS_INICIAIS
+        # Carregar recorde salvo
+        self.recorde = carregar_recorde()
         self.tempo_decorrido = 0  # em ms
         self.tempo_inicio = pygame.time.get_ticks()
         self.pausado = False
@@ -119,6 +122,14 @@ class Jogo:
                     
                     if self.vidas <= 0:
                         self.game_over = True
+                        # Se houve novo recorde, salvar imediatamente
+                        try:
+                            if self.pontuacao > self.recorde:
+                                self.recorde = self.pontuacao
+                                salvar_recorde(self.recorde)
+                        except Exception:
+                            # Não interrompe a lógica do jogo se falhar ao salvar
+                            pass
         
         # Gerar novas moedas periodicamente
         tempo_atual_ms = pygame.time.get_ticks()
@@ -178,6 +189,16 @@ class Jogo:
             f"Vidas: {self.vidas}", True, COR_TEXTO
         )
         tela.blit(texto_vidas, (10, 40))
+
+        # Recorde
+        try:
+            texto_recorde = self.fonte_pequena.render(
+                f"Recorde: {self.recorde}", True, COR_TEXTO
+            )
+            tela.blit(texto_recorde, (10, 70))
+        except Exception:
+            # Se algo falhar (ex.: recorde não definido), não quebrar a UI
+            pass
         
         # Tempo
         segundos = self.tempo_decorrido // 1000
