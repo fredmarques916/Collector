@@ -1,13 +1,14 @@
-# Imagens
+# assets/imagens
 
-Pasta destinada a sprites, fundos, icones e outros elementos visuais.
+Este diretório contém os recursos de imagem utilizados no jogo Collector.
 
-## Conteudo atual
+## Arquivos
 
-- `spritesheet.bmp`: spritesheet base do template.
+| Arquivo | Descrição | Fonte |
+|---|---|---|
+| `spritesheet.bmp` | Spritesheet utilizada como recurso gráfico do jogo | Criado pelo grupo |
 
-## Recomendações
+## Observações
 
-- Separe imagens por tema quando o projeto crescer.
-- Mantenha dimensoes e padroes consistentes para facilitar colisao e animacao.
-- Prefira formatos com transparencia quando necessario (ex.: `.png`).
+- Os elementos visuais do jogo são desenhados com formas geométricas básicas via Pygame.
+- Este diretório existe para comportar futuras imagens caso o projeto seja expandido.
