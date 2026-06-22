@@ -42,5 +42,5 @@ NUM_OBSTACULOS_INICIAL = 2         # Número inicial de obstáculos (reduzido pa
 NUM_OBSTACULOS_MAX = 5             # Número máximo de obstáculos simultâneos
 
 # ==================== ARQUIVO DE DADOS ====================
-CAMINHO_ARQUIVO_RECORDE = "dados/recorde.txt"
+CAMINHO_ARQUIVO_RECORDE = "data/recorde.txt"
 RECORDE_PADRAO = 0

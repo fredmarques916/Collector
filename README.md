@@ -54,8 +54,8 @@ Coletar moedas para aumentar a pontuação e sobreviver o máximo de tempo poss�
 Collector/
 │
 ├── assets/
-│   ├── images/
-│   └── sounds/
+│   ├── imagens/
+│   └── sons/
 │
 ├── data/
 │   ├── ranking.txt
